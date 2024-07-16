@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semestral Calendar</title>
+    <style>
+        .input-like-div {
+            width: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 307.88px;
+            height: 237px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .year-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .year-navigation button {
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: #FFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .year-navigation span {
+            width: 80px;
+            text-align: center;
+            border: 0px solid #ccc;
+            border-radius: 5px;
+            font-size: 25px;
+        }
+
+        .semester-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .semester-buttons label {
+            display: block;
+            width: 100%;
+            padding: 22px 0px;
+            margin: 5px 0;
+            background-color: #fff;
+            color: #000;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+            border: 1px solid rgb(223, 223, 223);
+        }
+
+        .semester-buttons label:hover {
+            background-color: #75ace7;
+        }
+
+        .semester-buttons input[type="checkbox"] {
+            display: none;
+        }
+
+        .semester-buttons input[type="checkbox"]:checked + label {
+            background-color: #007BFF;
+            color: #FFF;
+        }
+
+        .linha {
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="input-like-div" id="calendarInput">Selecionar Semestre
+    <div class="dropdown" id="dropdownMenu" style="display: none">
+        <div class="year-navigation">
+            <svg xmlns="http://www.w3.org/2000/svg" id="anterior" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
+              </svg>
+            <span id="ano">2024</span>
+           <svg xmlns="http://www.w3.org/2000/svg" id="proximo" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
+              </svg>
+        </div>
+        <div class="semester-buttons">
+            <input type="checkbox" id="sem1" data-semester="1">
+            <label for="sem1">1º Semestre</label>
+            <input type="checkbox" id="sem2" data-semester="2">
+            <label for="sem2">2º Semestre</label>
+        </div>
+    </div>
+</div>
+
+<a href="novaJanela.html" target="_blank">Clique</a>
+
+<script>
+let selectedSemesters = {};
+
+function calendarSemestre() {
+    let div = document.getElementById("calendarInput");
+    let divCalendar = document.getElementById("dropdownMenu");
+
+    div.addEventListener("click", function(event) {
+        divCalendar.style.display = "";
+        event.stopPropagation();
+    });
+
+    document.addEventListener("click", function(event) {
+        if (!div.contains(event.target)) {
+            divCalendar.style.display = "none";
+        }
+    });
+}
+
+function saveSelectedSemesters(year) {
+    let sem1 = document.getElementById("sem1").checked;
+    let sem2 = document.getElementById("sem2").checked;
+    selectedSemesters[year] = { sem1, sem2 };
+}
+
+function restoreSelectedSemesters(year) {
+    if (selectedSemesters[year]) {
+        document.getElementById("sem1").checked = selectedSemesters[year].sem1;
+        document.getElementById("sem2").checked = selectedSemesters[year].sem2;
+    } else {
+        document.getElementById("sem1").checked = false;
+        document.getElementById("sem2").checked = false;
+    }
+}
+
+function eventosCalendario() {
+    let proximo = document.getElementById("proximo");
+    let anterior = document.getElementById("anterior");
+    let spanAno = document.getElementById("ano");
+
+    proximo.addEventListener("click", function() {
+        let currentYear = spanAno.textContent;
+        saveSelectedSemesters(currentYear);
+        spanAno.textContent = parseInt(spanAno.textContent) + 1;
+        restoreSelectedSemesters(spanAno.textContent);
+    });
+
+    anterior.addEventListener("click", function() {
+        let currentYear = spanAno.textContent;
+        saveSelectedSemesters(currentYear);
+        spanAno.textContent = parseInt(spanAno.textContent) - 1;
+        restoreSelectedSemesters(spanAno.textContent);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    let spanAno = document.getElementById("ano");
+    let currentYear = new Date().getFullYear();
+    spanAno.textContent = currentYear;
+    restoreSelectedSemesters(currentYear);
+});
+
+calendarSemestre();
+eventosCalendario();
+</script>
+
+</body>
+</html>
