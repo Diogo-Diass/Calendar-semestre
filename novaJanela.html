@@ -6,6 +6,10 @@
     <title>Flatpickr Multiple and Range</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
+        #datePicker{
+            position: absolute;
+            top: 20em;
+        }
         .flatpickr-calendar .custom-button {
             margin: 5px;
             padding: 5px 10px;
@@ -14,13 +18,11 @@
             border: none;
             cursor: pointer;
         }
-
         .span-datas{
             background-color: #780000;
             color: white;
             padding: 5px;
             box-sizing: border-box;
-            /* margin-top: 0em; */
             position: relative;
             top: 1em;
             margin-right: 1em;
@@ -35,19 +37,63 @@
 
 <input type="text" id="datePicker">
 <div id="savedRanges"></div> <!-- Div para exibir os ranges salvos -->
+<div id="saveMultiples"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     let datePicker = document.getElementById('datePicker');
     let flatpickrInstance;
-    let mode = 'range';  // Variável para armazenar o modo atual
+    let mode = 'multiple';  // Variável para armazenar o modo atual
     window.listaDatas = []; // Array para armazenar os ranges salvos
+    let arrayMultiple = []
+
+    // Função para adicionar o card de uma data selecionada
+    function addCard(date) {
+        let dia = date.getDate();
+        let mes = date.getMonth() + 1;
+        let ano = date.getFullYear();
+
+        let dataCompleta = ano + (mes < 10 ? '0' : '') + mes + (dia < 10 ? '0' : '') + dia;
+        let dataFormat = (dia < 10 ? '0' : '') + dia + "/" + (mes < 10 ? '0' : '') + mes + "/" + ano;
+
+        let divMultiplos = document.getElementById("saveMultiples");
+
+        let span = document.createElement("span");
+        let div = document.createElement("div");
+        let buttonDelete = document.createElement("button");
+
+        span.classList.add("span-datas");
+        buttonDelete.classList.add("span-datas");
+
+        buttonDelete.innerHTML = "x";
+        span.innerHTML = dataFormat;
+
+        span.dataset.date = dataCompleta;
+
+        div.appendChild(buttonDelete);
+        div.appendChild(span);
+
+        divMultiplos.appendChild(div);
+
+        // Adiciona evento de exclusão
+        buttonDelete.addEventListener("click", function() {
+            let index = window.listaDatas.indexOf(dataCompleta);
+            if (index > -1) {
+                window.listaDatas.splice(index, 1);
+                div.remove();
+            }
+        });
+
+        // Adiciona a data ao array de datas selecionadas
+        window.listaDatas.push(dataCompleta);
+    }
 
     function initializeFlatpickr(shouldOpen = false) {
         if (flatpickrInstance) {
             flatpickrInstance.destroy();
         }
 
+        flatpickr.localize(flatpickr.l10ns.pt)
         flatpickrInstance = flatpickr(datePicker, {
             mode: mode,
             dateFormat: "d/m/Y",
@@ -127,32 +173,77 @@
                 }
             },
             onChange: function(selectedDates, dateStr, instance) {
-                let inicio = selectedDates[0];
-                let end = selectedDates[1];
-                let array = [];
-                let dataFormatArray = [];
+                if(mode == "range"){
+                    let inicio = selectedDates[0];
+                    let end = selectedDates[1];
+                    let array = [];
+                    let dataFormatArray = [];
 
-                while(inicio <= end){
-                    setTimeout(() => {
-                        instance.open()
-                    }, 0);
-                    let dia = inicio.getDate();
-                    let mes = inicio.getMonth() + 1;
-                    let ano = inicio.getFullYear();
-                  
-                    let dataCompleta = ano + (mes < 10 ? '0' : '') + mes + (dia < 10 ? '0' : '') + dia;
-                    let dataFormat = (dia < 10 ? '0' : '') + dia + "/" + (mes < 10 ? '0' : '') + mes +"/" + ano;
+                    while(inicio <= end){
+                        setTimeout(() => {
+                            instance.open()
+                        }, 0);
+                        let dia = inicio.getDate();
+                        let mes = inicio.getMonth() + 1;
+                        let ano = inicio.getFullYear();
+                    
+                        let dataCompleta = ano + (mes < 10 ? '0' : '') + mes + (dia < 10 ? '0' : '') + dia;
+                        let dataFormat = (dia < 10 ? '0' : '') + dia + "/" + (mes < 10 ? '0' : '') + mes +"/" + ano;
 
-                    array.push(dataCompleta);
-                    dataFormatArray.push(dataFormat);
-                    inicio.setDate(inicio.getDate() + 1);
-                }
+                        array.push(dataCompleta);
+                        dataFormatArray.push(dataFormat);
+                        inicio.setDate(inicio.getDate() + 1);
+                    }
 
-                window.currentRange = array;
-                window.currentFormattedRange = dataFormatArray;
+                    window.currentRange = array;
+                    window.currentFormattedRange = dataFormatArray;
 
-                if (shouldOpen) {
-                    instance.open();
+                    if (shouldOpen) {
+                        instance.open();
+                    }
+                } else {
+                    instance.open()
+                    let divMultiplos = document.getElementById("saveMultiples")
+                    arrayMultiple = []
+                    divMultiplos.innerHTML = ""
+
+                    selectedDates.sort((a, b) => b - a)
+
+                    for(i in selectedDates){
+                        let dia = selectedDates[i].getDate();
+                        let mes = selectedDates[i].getMonth() + 1;
+                        let ano = selectedDates[i].getFullYear();
+
+                        let dataCompleta = ano + (mes < 10 ? '0' : '') + mes + (dia < 10 ? '0' : '') + dia;
+
+                        arrayMultiple.push(dataCompleta)
+
+                        window.listaDatas = arrayMultiple
+
+                        let span = document.createElement("span")
+                        let div = document.createElement("div")
+                        let buttonDelete = document.createElement("button")
+                        span.classList.add("span-datas")
+                        buttonDelete.classList.add("span-datas")
+
+                        buttonDelete.innerHTML = "x"
+                        span.innerHTML = (dia < 10 ? '0' : '') + dia + "/" + (mes < 10 ? '0' : '') + mes + "/" +  ano
+
+                        span.dataset.date = dataCompleta
+
+                        div.appendChild(buttonDelete)
+                        div.appendChild(span)
+
+                        divMultiplos.appendChild(div)
+
+                        buttonDelete.addEventListener("click", function(){
+                            let index = selectedDates.findIndex(d => instance.formatDate(d, "Ymd") === span.dataset.date)
+                            if(index > -1){
+                                selectedDates.splice(index, 1)
+                                instance.setDate(selectedDates, true)
+                            }
+                        })
+                    }
                 }
             }
         });
@@ -162,8 +253,20 @@
         }
     }
 
+    // Função para definir a data inicial e adicionar o card correspondente
+    function setInitialDate(initialDate) {
+        if (mode === 'multiple') {
+            flatpickrInstance.setDate(initialDate, true);
+
+        }
+    }
+
     // Inicializa o Flatpickr
     initializeFlatpickr();
+
+    // Define a data inicial (exemplo: 15/07/2024)
+    let dynamicInitialDate = "15/07/2024";
+    setInitialDate(dynamicInitialDate);
 </script>
 
 </body>

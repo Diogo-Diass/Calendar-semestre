@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,9 +15,10 @@
             text-align: center;
             position: relative;
         }
+
         .dropdown {
             position: absolute;
-            top: 40px;
+            top: 300px;
             left: 0;
             width: 307.88px;
             border: 1px solid #ccc;
@@ -27,12 +29,14 @@
             padding: 10px;
             text-align: center;
         }
+
         .year-navigation {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
+
         .year-navigation button {
             padding: 5px 10px;
             background-color: #007BFF;
@@ -41,6 +45,7 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .year-navigation span {
             width: 80px;
             text-align: center;
@@ -48,11 +53,13 @@
             border-radius: 5px;
             font-size: 25px;
         }
+
         .semester-buttons {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
         .semester-buttons label {
             display: block;
             width: 100%;
@@ -66,19 +73,24 @@
             box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
             border: 1px solid rgb(223, 223, 223);
         }
+
         .semester-buttons label:hover {
             background-color: #75ace7;
         }
+
         .semester-buttons input[type="checkbox"] {
             display: none;
         }
+
         .semester-buttons input[type="checkbox"]:checked+label {
             background-color: #007BFF;
             color: #FFF;
         }
+
         .linha {
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
         }
+
         .span {
             display: block;
             margin-top: 10px;
@@ -87,232 +99,295 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
+        #TrimestresSalvo{
+            display: flex;
+        }
+
+        #TrimestresSalvo div{
+            display: flex;
+            align-items: baseline;
+        }
+
+        .buttonDelete{
+            height: 80%;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="input-like-div" id="calendarInputTrimestre">Selecionar Trimestre
-    <div class="dropdown" id="dropdownMenuTrimestre" style="display: none">
-        <div class="year-navigation">
-            <svg xmlns="http://www.w3.org/2000/svg" id="anteriorTrimestre" width="16" height="16" fill="currentColor"
-                 class="bi bi-arrow-left-short" viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                      d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
-            </svg>
-            <span id="anoTrimestre">2024</span>
-            <svg xmlns="http://www.w3.org/2000/svg" id="proximoTrimestre" width="16" height="16" fill="currentColor"
-                 class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                      d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
-            </svg>
-        </div>
-        <div class="semester-buttons">
-            <input type="checkbox" id="tri1" data-trimestre="1">
-            <label for="tri1" id="labelTri1">1º Trimestre</label>
-            <input type="checkbox" id="tri2" data-trimestre="2">
-            <label for="tri2" id="labelTri2">2º Trimestre</label>
-            <input type="checkbox" id="tri3" data-trimestre="3">
-            <label for="tri3" id="labelTri3">3º Trimestre</label>
-            <input type="checkbox" id="tri4" data-trimestre="4">
-            <label for="tri4" id="labelTri4">4º Trimestre</label>
+    <div class="input-like-div" id="calendarInputTrimestre">Selecionar Trimestre
+        <div class="dropdown" id="dropdownMenuTrimestre" style="display: none">
+            <div class="year-navigation">
+                <svg xmlns="http://www.w3.org/2000/svg" id="anteriorTrimestre" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                </svg>
+                <span id="anoTrimestre">2024</span>
+                <svg xmlns="http://www.w3.org/2000/svg" id="proximoTrimestre" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
+                </svg>
+            </div>
+            <div class="semester-buttons">
+                <input type="checkbox" id="tri1" data-trimestre="1">
+                <label for="tri1" id="labelTri1">1º Trimestre</label>
+                <input type="checkbox" id="tri2" data-trimestre="2">
+                <label for="tri2" id="labelTri2">2º Trimestre</label>
+                <input type="checkbox" id="tri3" data-trimestre="3">
+                <label for="tri3" id="labelTri3">3º Trimestre</label>
+                <input type="checkbox" id="tri4" data-trimestre="4">
+                <label for="tri4" id="labelTri4">4º Trimestre</label>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="TrimestresSalvo"></div>
+    <div id="TrimestresSalvo"></div>
 
-<a href="novaJanela.html" target="_blank">Clique</a>
+    <a href="novaJanela.html" target="_blank">Clique</a>
 
-<script>
-    let selectedTrimestres = {};
+    <script>
+        let selectedTrimestres = {};
 
-    function calendarTrimestre() {
-        let div = document.getElementById("calendarInputTrimestre");
-        let divCalendar = document.getElementById("dropdownMenuTrimestre");
+        function calendarTrimestre() {
+            let div = document.getElementById("calendarInputTrimestre");
+            let divCalendar = document.getElementById("dropdownMenuTrimestre");
 
-        div.addEventListener("click", function (event) {
-            divCalendar.style.display = "";
-            event.stopPropagation();
-        });
+            div.addEventListener("click", function (event) {
+                divCalendar.style.display = "";
+                event.stopPropagation();
+            });
 
-        document.addEventListener("click", function (event) {
-            if (!div.contains(event.target)) {
-                divCalendar.style.display = "none";
-            }
-        });
-    }
-
-    function saveSelectedTrimestres(year) {
-        let tri1 = document.getElementById("tri1").checked;
-        let tri2 = document.getElementById("tri2").checked;
-        let tri3 = document.getElementById("tri3").checked;
-        let tri4 = document.getElementById("tri4").checked;
-        selectedTrimestres[year] = {tri1, tri2, tri3, tri4};
-    }
-
-    function restoreSelectedTrimestres(year) {
-        if (selectedTrimestres[year]) {
-            document.getElementById("tri1").checked = selectedTrimestres[year].tri1;
-            document.getElementById("tri2").checked = selectedTrimestres[year].tri2;
-            document.getElementById("tri3").checked = selectedTrimestres[year].tri3;
-            document.getElementById("tri4").checked = selectedTrimestres[year].tri4;
-        } else {
-            document.getElementById("tri1").checked = false;
-            document.getElementById("tri2").checked = false;
-            document.getElementById("tri3").checked = false;
-            document.getElementById("tri4").checked = false;
+            document.addEventListener("click", function (event) {
+                if (!div.contains(event.target)) {
+                    divCalendar.style.display = "none";
+                }
+            });
         }
-    }
 
-    function exibirCardsTrimestre() {
-        let tri1 = document.getElementById("tri1");
-        let tri2 = document.getElementById("tri2");
-        let tri3 = document.getElementById("tri3");
-        let tri4 = document.getElementById("tri4");
+        function saveSelectedTrimestres(year) {
+            let tri1 = document.getElementById("tri1").checked;
+            let tri2 = document.getElementById("tri2").checked;
+            let tri3 = document.getElementById("tri3").checked;
+            let tri4 = document.getElementById("tri4").checked;
+            selectedTrimestres[year] = { tri1, tri2, tri3, tri4 };
+        }
 
-        tri1.addEventListener("change", function () {
-            toggleCardTrimestre("1º Trimestre", tri1.checked);
-        });
+        function restoreSelectedTrimestres(year) {
+            if (selectedTrimestres[year]) {
+                document.getElementById("tri1").checked = selectedTrimestres[year].tri1;
+                document.getElementById("tri2").checked = selectedTrimestres[year].tri2;
+                document.getElementById("tri3").checked = selectedTrimestres[year].tri3;
+                document.getElementById("tri4").checked = selectedTrimestres[year].tri4;
+            } else {
+                document.getElementById("tri1").checked = false;
+                document.getElementById("tri2").checked = false;
+                document.getElementById("tri3").checked = false;
+                document.getElementById("tri4").checked = false;
+            }
+        }
 
-        tri2.addEventListener("change", function () {
-            toggleCardTrimestre("2º Trimestre", tri2.checked);
-        });
+        function exibirCardsTrimestre() {
+            let tri1 = document.getElementById("tri1");
+            let tri2 = document.getElementById("tri2");
+            let tri3 = document.getElementById("tri3");
+            let tri4 = document.getElementById("tri4");
 
-        tri3.addEventListener("change", function () {
-            toggleCardTrimestre("3º Trimestre", tri3.checked);
-        });
+            tri1.addEventListener("change", function () {
+                toggleCardTrimestre("1º Trimestre", tri1.checked);
+            });
 
-        tri4.addEventListener("change", function () {
-            toggleCardTrimestre("4º Trimestre", tri4.checked);
-        });
-    }
+            tri2.addEventListener("change", function () {
+                toggleCardTrimestre("2º Trimestre", tri2.checked);
+            });
 
-    let arrayTrimestres = [];
+            tri3.addEventListener("change", function () {
+                toggleCardTrimestre("3º Trimestre", tri3.checked);
+            });
+
+            tri4.addEventListener("change", function () {
+                toggleCardTrimestre("4º Trimestre", tri4.checked);
+            });
+        }
+
+        let arrayTrimestres = [];
 
     function toggleCardTrimestre(trimestreText, isChecked) {
-        let div = document.getElementById("TrimestresSalvo");
-        let ano = document.getElementById("anoTrimestre").textContent;
-        let spanId = `${trimestreText}-${ano}`;
-        let existingSpan = document.getElementById(spanId);
+    let div = document.getElementById("TrimestresSalvo");
+    let ano = document.getElementById("anoTrimestre").textContent;
+    let spanId = `${trimestreText}-${ano}`;
+    let existingSpan = document.getElementById(spanId);
 
-        let trimestreFormat = trimestreText.substring(0, 6) + "/" + ano;
-        let trimestreFormatSemEspaco = trimestreFormat.replace(/\s/g, '');
+    let trimestreFormat = trimestreText.substring(0, 6) + "/" + ano;
+    let trimestreFormatSemEspaco = trimestreFormat.replace(/\s/g, '');
 
-        if (isChecked) {
-            if (!existingSpan) {
+    if (isChecked) {
+        if (!existingSpan) {
+            let span = document.createElement("span");
+            let buttonDelete = document.createElement("button")
+            let divCriada = document.createElement("div")
+            buttonDelete.innerHTML = "x"
+            buttonDelete.classList.add("buttonDelete")
+            span.innerHTML = `${trimestreText} de ${ano}`;
+            span.classList.add("span");
+            divCriada.id = spanId;
+            divCriada.appendChild(buttonDelete)
+            divCriada.appendChild(span);
+
+            div.appendChild(divCriada)
+
+            arrayTrimestres.push(trimestreFormatSemEspaco);
+
+            arrayTrimestres.sort((a, b) => {
+                let trimestreA = parseInt(a.substring(0, 1));
+                let anoA = parseInt(a.substring(6, 10)); // Ajustar índice para pegar o ano corretamente
+                let sortKeyA = anoA * 10 + trimestreA; // Chave de ordenação
+
+                let trimestreB = parseInt(b.substring(0, 1));
+                let anoB = parseInt(b.substring(6, 10)); // Ajustar índice para pegar o ano corretamente
+                let sortKeyB = anoB * 10 + trimestreB; // Chave de ordenação
+
+                // Ordena de forma decrescente (mais recente primeiro)
+                return sortKeyB - sortKeyA;
+            });
+
+            div.innerHTML = ""; // Limpa os elementos filhos antes de reordenar
+
+            arrayTrimestres.forEach((trimestreFormatSemEspaco, index) => {
+                let trimestreText = trimestreFormatSemEspaco.substring(0, 6);
+                let ano = trimestreFormatSemEspaco.substring(7, 11);
+
+                let divCriada = document.createElement("div");
+                let buttonDelete = document.createElement("button");
                 let span = document.createElement("span");
-                let buttonDelete = document.createElement("button")
-                let divCriada = document.createElement("div")
-                buttonDelete.innerHTML = "x"
+
+                buttonDelete.innerHTML = "x";
+                buttonDelete.classList.add("buttonDelete");
                 span.innerHTML = `${trimestreText} de ${ano}`;
                 span.classList.add("span");
-                span.id = spanId;
-                divCriada.appendChild(buttonDelete)
+
+                divCriada.id = `${trimestreText}-${ano}`;
+                divCriada.appendChild(buttonDelete);
                 divCriada.appendChild(span);
 
-                div.appendChild(divCriada)
-
-                arrayTrimestres.push(trimestreFormatSemEspaco);
-
-                divCriada.setAttribute("data-index", arrayTrimestres.length - 1)
+                div.appendChild(divCriada);
 
                 buttonDelete.addEventListener("click", function () {
-                    let index = divCriada.getAttribute("data-index")
-                    divCriada.remove()
-                    arrayTrimestres.splice(index, 1)
-
-                    let children = div.children
-
-                    for (let i = 0; i < children.length; i++) {
-                        children[i].setAttribute("data-index", i);
-                    }
-
-                    // Desmarcar o checkbox correspondente
+                    arrayTrimestres = arrayTrimestres.filter((_, i) => i !== index);
+                    divCriada.remove();
+                    window.listaDatas = arrayTrimestres;
                     document.querySelector(`input[data-trimestre="${trimestreText[0]}"]`).checked = false;
+                });
 
-                    window.listaDatas = arrayTrimestres
-                })
+                divCriada.setAttribute("data-index", index);
+            });
 
-                window.listaDatas = arrayTrimestres
+            window.listaDatas = arrayTrimestres;
 
-            }
-        } else {
-            if (existingSpan) {
-                div.removeChild(existingSpan);
-
-                arrayTrimestres = arrayTrimestres.filter(trimestreFilt => trimestreFilt !== trimestreFormatSemEspaco);
-            }
+        }
+    } else {
+        if (existingSpan) {
+            div.removeChild(existingSpan);
+            arrayTrimestres = arrayTrimestres.filter(trimestreFilt => trimestreFilt !== trimestreFormatSemEspaco);
+            window.listaDatas = arrayTrimestres;
         }
     }
+}
 
-    function eventosCalendarioTrimestre() {
-        let proximo = document.getElementById("proximoTrimestre");
-        let anterior = document.getElementById("anteriorTrimestre");
-        let spanAno = document.getElementById("anoTrimestre");
 
-        proximo.addEventListener("click", function () {
-            let currentYear = spanAno.textContent;
-            saveSelectedTrimestres(currentYear);
-            spanAno.textContent = parseInt(spanAno.textContent) + 1;
-            restoreSelectedTrimestres(spanAno.textContent);
+        function eventosCalendarioTrimestre() {
+            let proximo = document.getElementById("proximoTrimestre");
+            let anterior = document.getElementById("anteriorTrimestre");
+            let spanAno = document.getElementById("anoTrimestre");
+
+            proximo.addEventListener("click", function () {
+                let currentYear = spanAno.textContent;
+                saveSelectedTrimestres(currentYear);
+                spanAno.textContent = parseInt(spanAno.textContent) + 1;
+                restoreSelectedTrimestres(spanAno.textContent);
+                verifAnoAtual();
+            });
+
+            anterior.addEventListener("click", function () {
+                let currentYear = spanAno.textContent;
+                saveSelectedTrimestres(currentYear);
+                spanAno.textContent = parseInt(spanAno.textContent) - 1;
+                restoreSelectedTrimestres(spanAno.textContent);
+                verifAnoAtual();
+            });
+        }
+
+        function verifAnoAtual() {
+            let proximo = document.getElementById("proximoTrimestre");
+            let ano = document.getElementById("anoTrimestre").textContent;
+            let anoAtual = new Date();
+
+            if (anoAtual.getFullYear() == parseInt(ano)) {
+                proximo.style.visibility = "hidden";
+            } else {
+                proximo.style.visibility = "visible";
+            }
+
+            if (anoAtual.getMonth() + 1 <= 3 && anoAtual.getFullYear() == parseInt(ano)) {
+                document.getElementById("labelTri1").style.display = "";
+                document.getElementById("labelTri2").style.display = "none";
+                document.getElementById("labelTri3").style.display = "none";
+                document.getElementById("labelTri4").style.display = "none";
+            } else if (anoAtual.getMonth() + 1 <= 6 && anoAtual.getFullYear() == parseInt(ano)) {
+                document.getElementById("labelTri1").style.display = "";
+                document.getElementById("labelTri2").style.display = "";
+                document.getElementById("labelTri3").style.display = "none";
+                document.getElementById("labelTri4").style.display = "none";
+            } else if (anoAtual.getMonth() + 1 <= 9 && anoAtual.getFullYear() == parseInt(ano)) {
+                document.getElementById("labelTri1").style.display = "";
+                document.getElementById("labelTri2").style.display = "";
+                document.getElementById("labelTri3").style.display = "";
+                document.getElementById("labelTri4").style.display = "none";
+            } else {
+                document.getElementById("labelTri1").style.display = "";
+                document.getElementById("labelTri2").style.display = "";
+                document.getElementById("labelTri3").style.display = "";
+                document.getElementById("labelTri4").style.display = "";
+            }
+        }
+
+        function marcarUltimoTrimestreDisponivel() {
+            let anoAtual = new Date();
+            let ano = anoAtual.getFullYear();
+            let mes = anoAtual.getMonth() + 1;
+
+            if (mes <= 3) {
+                document.getElementById("tri1").checked = true;
+                toggleCardTrimestre("1º Trimestre", true);
+            } else if (mes <= 6) {
+                document.getElementById("tri2").checked = true;
+                toggleCardTrimestre("2º Trimestre", true);
+            } else if (mes <= 9) {
+                document.getElementById("tri3").checked = true;
+                toggleCardTrimestre("3º Trimestre", true);
+            } else {
+                document.getElementById("tri4").checked = true;
+                toggleCardTrimestre("4º Trimestre", true);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let spanAno = document.getElementById("anoTrimestre");
+            let currentYear = new Date().getFullYear();
+            spanAno.textContent = currentYear;
+            restoreSelectedTrimestres(currentYear);
             verifAnoAtual();
+            marcarUltimoTrimestreDisponivel(); // Marcar o último trimestre disponível ao carregar a página
         });
 
-        anterior.addEventListener("click", function () {
-            let currentYear = spanAno.textContent;
-            saveSelectedTrimestres(currentYear);
-            spanAno.textContent = parseInt(spanAno.textContent) - 1;
-            restoreSelectedTrimestres(spanAno.textContent);
-            verifAnoAtual();
-        });
-    }
-
-    function verifAnoAtual() {
-        let proximo = document.getElementById("proximoTrimestre");
-        let ano = document.getElementById("anoTrimestre").textContent;
-        let anoAtual = new Date();
-
-        if (anoAtual.getFullYear() == parseInt(ano)) {
-            proximo.style.visibility = "hidden";
-        } else {
-            proximo.style.visibility = "visible";
-        }
-
-        if (anoAtual.getMonth() + 1 <= 3 && anoAtual.getFullYear() == parseInt(ano)) {
-            document.getElementById("labelTri1").style.display = "";
-            document.getElementById("labelTri2").style.display = "none";
-            document.getElementById("labelTri3").style.display = "none";
-            document.getElementById("labelTri4").style.display = "none";
-        } else if (anoAtual.getMonth() + 1 <= 6 && anoAtual.getFullYear() == parseInt(ano)) {
-            document.getElementById("labelTri1").style.display = "";
-            document.getElementById("labelTri2").style.display = "";
-            document.getElementById("labelTri3").style.display = "none";
-            document.getElementById("labelTri4").style.display = "none";
-        } else if (anoAtual.getMonth() + 1 <= 9 && anoAtual.getFullYear() == parseInt(ano)) {
-            document.getElementById("labelTri1").style.display = "";
-            document.getElementById("labelTri2").style.display = "";
-            document.getElementById("labelTri3").style.display = "";
-            document.getElementById("labelTri4").style.display = "none";
-        } else {
-            document.getElementById("labelTri1").style.display = "";
-            document.getElementById("labelTri2").style.display = "";
-            document.getElementById("labelTri3").style.display = "";
-            document.getElementById("labelTri4").style.display = "";
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        let spanAno = document.getElementById("anoTrimestre");
-        let currentYear = new Date().getFullYear();
-        spanAno.textContent = currentYear;
-        restoreSelectedTrimestres(currentYear);
-        verifAnoAtual();
-    });
-
-    calendarTrimestre();
-    eventosCalendarioTrimestre();
-    exibirCardsTrimestre();
-</script>
+        calendarTrimestre();
+        eventosCalendarioTrimestre();
+        exibirCardsTrimestre();
+    </script>
 
 </body>
+
 </html>
