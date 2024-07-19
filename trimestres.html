@@ -99,19 +99,6 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-
-        #TrimestresSalvo{
-            display: flex;
-        }
-
-        #TrimestresSalvo div{
-            display: flex;
-            align-items: baseline;
-        }
-
-        .buttonDelete{
-            height: 80%;
-        }
     </style>
 </head>
 
@@ -120,8 +107,8 @@
     <div class="input-like-div" id="calendarInputTrimestre">Selecionar Trimestre
         <div class="dropdown" id="dropdownMenuTrimestre" style="display: none">
             <div class="year-navigation">
-                <svg xmlns="http://www.w3.org/2000/svg" id="anteriorTrimestre" width="16" height="16" fill="currentColor"
-                    class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" id="anteriorTrimestre" width="16" height="16"
+                    fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
                         d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                 </svg>
@@ -174,6 +161,7 @@
             let tri3 = document.getElementById("tri3").checked;
             let tri4 = document.getElementById("tri4").checked;
             selectedTrimestres[year] = { tri1, tri2, tri3, tri4 };
+            console.log(selectedTrimestres)
         }
 
         function restoreSelectedTrimestres(year) {
@@ -215,88 +203,102 @@
 
         let arrayTrimestres = [];
 
-    function toggleCardTrimestre(trimestreText, isChecked) {
-    let div = document.getElementById("TrimestresSalvo");
-    let ano = document.getElementById("anoTrimestre").textContent;
-    let spanId = `${trimestreText}-${ano}`;
-    let existingSpan = document.getElementById(spanId);
+        function toggleCardTrimestre(trimestreText, isChecked) {
+            let div = document.getElementById("TrimestresSalvo");
+            let ano = document.getElementById("anoTrimestre").textContent;
+         
+            let trimestreFormat = trimestreText.substring(0, 6) + "/" + ano;
+            let trimestreFormatSemEspaco = trimestreFormat.replace(/\s/g, '');
 
-    let trimestreFormat = trimestreText.substring(0, 6) + "/" + ano;
-    let trimestreFormatSemEspaco = trimestreFormat.replace(/\s/g, '');
+            let spanId = trimestreFormatSemEspaco;
+            let existingSpan = document.getElementById(spanId);
+ 
 
-    if (isChecked) {
-        if (!existingSpan) {
-            let span = document.createElement("span");
-            let buttonDelete = document.createElement("button")
-            let divCriada = document.createElement("div")
-            buttonDelete.innerHTML = "x"
-            buttonDelete.classList.add("buttonDelete")
-            span.innerHTML = `${trimestreText} de ${ano}`;
-            span.classList.add("span");
-            divCriada.id = spanId;
-            divCriada.appendChild(buttonDelete)
-            divCriada.appendChild(span);
 
-            div.appendChild(divCriada)
+            if (isChecked) {
+                if (!existingSpan) {
 
-            arrayTrimestres.push(trimestreFormatSemEspaco);
+                    arrayTrimestres.push(trimestreFormatSemEspaco);
 
-            arrayTrimestres.sort((a, b) => {
-                let trimestreA = parseInt(a.substring(0, 1));
-                let anoA = parseInt(a.substring(6, 10)); // Ajustar índice para pegar o ano corretamente
-                let sortKeyA = anoA * 10 + trimestreA; // Chave de ordenação
+                    arrayTrimestres.sort((a, b) => {
+                        let trimestreA = parseInt(a.substring(0, 1));
+                        let anoA = parseInt(a.substring(6, 10)); // Ajustar índice para pegar o ano corretamente
+                        let sortKeyA = anoA * 10 + trimestreA; // Chave de ordenação
 
-                let trimestreB = parseInt(b.substring(0, 1));
-                let anoB = parseInt(b.substring(6, 10)); // Ajustar índice para pegar o ano corretamente
-                let sortKeyB = anoB * 10 + trimestreB; // Chave de ordenação
+                        let trimestreB = parseInt(b.substring(0, 1));
+                        let anoB = parseInt(b.substring(6, 10)); // Ajustar índice para pegar o ano corretamente
+                        let sortKeyB = anoB * 10 + trimestreB; // Chave de ordenação
 
-                // Ordena de forma decrescente (mais recente primeiro)
-                return sortKeyB - sortKeyA;
-            });
+                        // Ordena de forma decrescente (mais recente primeiro)
+                        return sortKeyB - sortKeyA;
+                    });
 
-            div.innerHTML = ""; // Limpa os elementos filhos antes de reordenar
+                    div.innerHTML = ""
 
-            arrayTrimestres.forEach((trimestreFormatSemEspaco, index) => {
-                let trimestreText = trimestreFormatSemEspaco.substring(0, 6);
-                let ano = trimestreFormatSemEspaco.substring(7, 11);
+                    arrayTrimestres.forEach(valor => {
+                        let span = document.createElement("span");
+                        let buttonDelete = document.createElement("button")
+                        let divCriada = document.createElement("div")
+                        buttonDelete.innerHTML = "x"
+                        let trimestreFormat = valor.substring(0, 1)
+                        let anoFormat = valor.substring(6, 10)
+                        span.innerHTML = trimestreFormat + "º trimestre de " + anoFormat
+                        span.classList.add("span");
+                        divCriada.id = valor;
+                        divCriada.setAttribute("data-trimestre", valor.split("/")[0].substring(0, 1)); // Define data-trimestre no divCriada
+                        divCriada.appendChild(buttonDelete)
+                        divCriada.appendChild(span);
 
-                let divCriada = document.createElement("div");
-                let buttonDelete = document.createElement("button");
-                let span = document.createElement("span");
+                        div.appendChild(divCriada)
 
-                buttonDelete.innerHTML = "x";
-                buttonDelete.classList.add("buttonDelete");
-                span.innerHTML = `${trimestreText} de ${ano}`;
-                span.classList.add("span");
+                        let children = div.children
 
-                divCriada.id = `${trimestreText}-${ano}`;
-                divCriada.appendChild(buttonDelete);
-                divCriada.appendChild(span);
+                        for (let i = 0; i < children.length; i++) {
+                            children[i].setAttribute("data-index", i);
+                        }
 
-                div.appendChild(divCriada);
+                        buttonDelete.addEventListener("click", function () {
 
-                buttonDelete.addEventListener("click", function () {
-                    arrayTrimestres = arrayTrimestres.filter((_, i) => i !== index);
-                    divCriada.remove();
-                    window.listaDatas = arrayTrimestres;
-                    document.querySelector(`input[data-trimestre="${trimestreText[0]}"]`).checked = false;
-                });
+                            let index = divCriada.getAttribute("data-index")
+                            divCriada.remove()
+                            arrayTrimestres.splice(index, 1)
 
-                divCriada.setAttribute("data-index", index);
-            });
+                            let children = div.children
 
-            window.listaDatas = arrayTrimestres;
+                            for (let i = 0; i < children.length; i++) {
+                                children[i].setAttribute("data-index", i);
+                            }
 
+                            console.log(trimestreText[0])
+
+                            document.querySelector(`input[data-trimestre="${divCriada.getAttribute("data-trimestre")}"]`).checked = false;
+
+                           setTimeout(() => {
+                                document.getElementById("dropdownMenuTrimestre").style.display = ""
+                            }, 0)
+
+                            saveSelectedTrimestres(ano)
+                            restoreSelectedTrimestres(ano)
+
+                        })
+
+                        window.listaDatas = arrayTrimestres
+
+                    });
+
+
+                }
+            } else {
+                if (existingSpan) {
+                    div.removeChild(existingSpan);
+
+                    arrayTrimestres = arrayTrimestres.filter(trimestreFilt => trimestreFilt !== trimestreFormatSemEspaco);
+
+                    window.listaDatas = arrayTrimestres
+
+                }
+            }
         }
-    } else {
-        if (existingSpan) {
-            div.removeChild(existingSpan);
-            arrayTrimestres = arrayTrimestres.filter(trimestreFilt => trimestreFilt !== trimestreFormatSemEspaco);
-            window.listaDatas = arrayTrimestres;
-        }
-    }
-}
-
 
         function eventosCalendarioTrimestre() {
             let proximo = document.getElementById("proximoTrimestre");
