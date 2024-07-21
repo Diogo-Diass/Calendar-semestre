@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trimestral Calendar</title>
+    <style>
+        .input-like-div {
+            width: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 250px;
+            left: 0;
+            width: 307.88px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .year-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .year-navigation button {
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: #FFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .year-navigation span {
+            width: 80px;
+            text-align: center;
+            border: 0px solid #ccc;
+            border-radius: 5px;
+            font-size: 25px;
+        }
+
+        .semester-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .semester-buttons div {
+            display: block;
+            width: 100%;
+            padding: 22px 0px;
+            margin: 5px 0;
+            color: #000;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+            border: 1px solid rgb(223, 223, 223);
+        }
+
+        .selected {
+            background-color: #007BFF;
+            color: #FFF;
+        }
+
+        .span {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="input-like-div" id="calendarInput">Selecionar Semestre
+        <div class="dropdown" id="dropdownMenu" style="display: none">
+            <div class="year-navigation">
+                <svg xmlns="http://www.w3.org/2000/svg" id="anterior" width="16" height="16"
+                    fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                </svg>
+                <span id="ano"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" id="proximo" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
+                </svg>
+            </div>
+            <div class="semester-buttons" id="semestres-botoes">
+
+            </div>
+        </div>
+    </div>
+
+    <div id="semestresSalvo"></div>
+
+    <a href="novaJanela.html" target="_blank">Clique</a>
+
+    <script>
+        let selectedSemesters = {};
+
+        function criarSemestre() {
+            let sem1 = document.createElement("div")
+            let sem2 = document.createElement("div")
+           
+            let anoAtual = document.getElementById("ano").textContent
+
+            sem1.innerHTML = "1º Semestre"
+            sem2.innerHTML = "2º Semestre"
+
+
+            sem1.setAttribute("data-semestre", "1" + anoAtual)
+            sem2.setAttribute("data-semestre", "2" + anoAtual)
+           
+
+            let semestres = document.getElementById('semestres-botoes')
+
+            semestres.innerHTML = "";
+
+            let periodoAtual = new Date()
+            let mes = periodoAtual.getMonth() + 1
+
+            let proximo = document.getElementById("proximo");
+
+            if (periodoAtual.getFullYear() == parseInt(anoAtual)) {
+                proximo.style.visibility = "hidden";
+            } else {
+                proximo.style.visibility = "visible";
+            }
+
+            if (parseInt(anoAtual) == periodoAtual.getFullYear()) {
+                if (mes >= 6 && mes < 12) {
+                    semestres.appendChild(sem1)
+                } else if (mes == 12) {
+                    semestres.appendChild(sem1)
+                    semestres.appendChild(sem2)
+                }
+            } else {
+                semestres.appendChild(sem1)
+                semestres.appendChild(sem2)
+               
+            }
+
+            aplicarSelecaoSemestre();
+        }
+
+        let arraySemestre = []
+
+        function toggleCardSemestre(semestreDiv, isChecked) {
+            let div = document.getElementById("semestresSalvo");
+            let ano = document.getElementById("ano").textContent;
+
+            let semestreText = semestreDiv.textContent;
+            let semestreFormat = semestreText.substring(0, 6) + "/" + ano;
+            let semestreFormatSemEspaco = semestreFormat.replace(/\s/g, '');
+
+            let spanId = semestreFormatSemEspaco;
+            let existingSpan = document.getElementById(spanId);
+
+            if (isChecked) {
+                if (!existingSpan) {
+
+                    arraySemestre.push(semestreFormatSemEspaco);
+
+                    arraySemestre.sort((a, b) => {
+                        let semestreA = parseInt(a.substring(0, 1));
+                        let anoA = parseInt(a.substring(6, 10)); // Ajustar índice para pegar o ano corretamente
+                        let sortKeyA = anoA * 10 + semestreA; // Chave de ordenação
+
+                        let semestreB = parseInt(b.substring(0, 1));
+                        let anoB = parseInt(b.substring(6, 10)); // Ajustar índice para pegar o ano corretamente
+                        let sortKeyB = anoB * 10 + semestreB; // Chave de ordenação
+
+                        // Ordena de forma decrescente (mais recente primeiro)
+                        return sortKeyB - sortKeyA;
+                    });
+
+                    div.innerHTML = ""
+
+                    arraySemestre.forEach(valor => {
+                        let span = document.createElement("span");
+                        let buttonDelete = document.createElement("button")
+                        let divCriada = document.createElement("div")
+                        buttonDelete.innerHTML = "x"
+                        let semestreFormat = valor.substring(0, 1)
+                        let anoFormat = valor.substring(6, 10)
+                        span.innerHTML = semestreFormat + "º semestre de " + anoFormat
+                        span.classList.add("span");
+                        divCriada.id = valor;
+                        divCriada.setAttribute("data-semestre", valor.split("/")[0].substring(0, 1)); // Define data-trimestre no divCriada
+                        divCriada.appendChild(buttonDelete)
+                        divCriada.appendChild(span);
+
+                        div.appendChild(divCriada)
+
+                        let children = div.children
+
+                        for (let i = 0; i < children.length; i++) {
+                            children[i].setAttribute("data-index", i);
+                        }
+
+                        buttonDelete.addEventListener("click", function () {
+                            let index = divCriada.getAttribute("data-index")
+                            divCriada.remove()
+                            arraySemestre.splice(index, 1)
+                            delete selectedSemesters[semestreFormat + anoFormat]; // Remove da lista de selecionados
+                            let semestreDiv = document.querySelector(`div[data-semestre='${semestreFormat}${anoFormat}']`);
+
+                            if (semestreDiv) {
+                                semestreDiv.classList.remove("selected");
+                                delete selectedSemesters[semestreDiv.getAttribute("data-semestre")];
+                            }
+
+
+                            let children = div.children
+
+                            for (let i = 0; i < children.length; i++) {
+                                children[i].setAttribute("data-index", i);
+                            }
+
+                            setTimeout(() => {
+                                document.getElementById("dropdownMenu").style.display = ""
+                            }, 0)
+                        })
+
+                        window.listaDatas = arraySemestre
+
+                    });
+                }
+            } else {
+                if (existingSpan) {
+                    div.removeChild(existingSpan);
+                    arraySemestre = arraySemestre.filter(semestreFilt => semestreFilt !== semestreFormatSemEspaco);
+                    delete selectedSemesters[semestreFormat + ano]; // Remove da lista de selecionados
+
+                    window.listaDatas = arraySemestre
+
+                }
+            }
+        }
+
+        function aplicarSelecaoSemestre() {
+            let anoAtual = document.getElementById("ano").textContent;
+            let semestres = document.querySelectorAll(`div[data-semestre$='${anoAtual}']`);
+
+            semestres.forEach(semestre => {
+                let semestreKey = semestre.getAttribute("data-semestre");
+
+                if (selectedSemesters[semestreKey]) {
+                    semestre.classList.add("selected");
+                    toggleCardSemestre(semestre, true);
+                }
+
+                semestre.addEventListener("click", function () {
+                    if (semestre.classList.contains("selected")) {
+                        semestre.classList.remove("selected");
+                        delete selectedSemesters[semestreKey];
+                        toggleCardSemestre(semestre, false);
+                    } else {
+                        semestre.classList.add("selected");
+                        selectedSemesters[semestreKey] = true;
+                        toggleCardSemestre(semestre, true);
+                    }
+                });
+            });
+        }
+
+
+        function calendarSemestre() {
+            let div = document.getElementById("calendarInput");
+            let divCalendar = document.getElementById("dropdownMenu");
+            criarSemestre()
+
+            div.addEventListener("click", function (event) {
+                divCalendar.style.display = "";
+                event.stopPropagation();
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!div.contains(event.target)) {
+                    divCalendar.style.display = "none";
+                }
+            });
+        }
+
+        function eventosCalendarioSemestre() {
+            let proximo = document.getElementById("proximo");
+            let anterior = document.getElementById("anterior");
+            let spanAno = document.getElementById("ano");
+
+            proximo.addEventListener("click", function () {
+                spanAno.textContent = parseInt(spanAno.textContent) + 1;
+                criarSemestre();
+            });
+
+            anterior.addEventListener("click", function () {
+                spanAno.textContent = parseInt(spanAno.textContent) - 1;
+                criarSemestre();
+            });
+        }
+
+        function marcarUltimoSemestreDisponivel() {
+            let anoAtual = document.getElementById("ano").textContent;
+            let dataAtual = new Date()
+            let mes = dataAtual.getMonth() + 1;
+
+            let sem1 = document.querySelector(`div[data-semestre='${'1' + anoAtual}']`)
+            let sem2 = document.querySelector(`div[data-semestre='${'2' + anoAtual}']`)
+           
+
+            let semestreDisponivel;
+            if (parseInt(anoAtual) == dataAtual.getFullYear()) {
+                if (mes >= 6 && mes < 12) {
+                    semestreDisponivel = sem1;
+                } else if (mes == 12) {
+                    semestreDisponivel = sem2;
+                }
+            }
+            if (semestreDisponivel) {
+                semestreDisponivel.classList.add("selected");
+                selectedSemesters[semestreDisponivel.getAttribute("data-semestre")] = true;
+                toggleCardSemestre(semestreDisponivel, true);
+            }
+
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let spanAno = document.getElementById("ano");
+            let currentYear = new Date().getFullYear();
+            spanAno.textContent = currentYear;
+            calendarSemestre();
+            eventosCalendarioSemestre();
+            marcarUltimoSemestreDisponivel()
+        });
+    </script>
+
+</body>
+
+</html>

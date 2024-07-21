@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trimestral Calendar</title>
+    <style>
+        .input-like-div {
+            width: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 250px;
+            left: 0;
+            width: 307.88px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .year-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .year-navigation button {
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: #FFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .year-navigation span {
+            width: 80px;
+            text-align: center;
+            border: 0px solid #ccc;
+            border-radius: 5px;
+            font-size: 25px;
+        }
+
+        .semester-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .semester-buttons div {
+            display: block;
+            width: 100%;
+            padding: 22px 0px;
+            margin: 5px 0;
+            color: #000;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+            border: 1px solid rgb(223, 223, 223);
+        }
+
+        .selected {
+            background-color: #007BFF;
+            color: #FFF;
+        }
+
+        .span {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="input-like-div" id="calendarInputTrimestre">Selecionar Trimestre
+        <div class="dropdown" id="dropdownMenuTrimestre" style="display: none">
+            <div class="year-navigation">
+                <svg xmlns="http://www.w3.org/2000/svg" id="anteriorTrimestre" width="16" height="16"
+                    fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                </svg>
+                <span id="anoTrimestre"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" id="proximoTrimestre" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
+                </svg>
+            </div>
+            <div class="semester-buttons" id="trimestres-botoes">
+
+            </div>
+        </div>
+    </div>
+
+    <div id="TrimestresSalvo"></div>
+
+    <a href="novaJanela.html" target="_blank">Clique</a>
+
+    <script>
+        let selectedTrimestres = {};
+
+        function criarTrimestre() {
+            let tri1 = document.createElement("div")
+            let tri2 = document.createElement("div")
+            let tri3 = document.createElement("div")
+            let tri4 = document.createElement("div")
+            let anoAtual = document.getElementById("anoTrimestre").textContent
+
+            tri1.innerHTML = "1º Trimestre"
+            tri2.innerHTML = "2º Trimestre"
+            tri3.innerHTML = "3º Trimestre"
+            tri4.innerHTML = "4º Trimestre"
+
+            tri1.setAttribute("data-trimestre", "1" + anoAtual)
+            tri2.setAttribute("data-trimestre", "2" + anoAtual)
+            tri3.setAttribute("data-trimestre", "3" + anoAtual)
+            tri4.setAttribute("data-trimestre", "4" + anoAtual)
+
+            let trimestres = document.getElementById('trimestres-botoes')
+
+            trimestres.innerHTML = "";
+
+            let periodoAtual = new Date()
+            let mes = periodoAtual.getMonth() + 1
+
+            let proximo = document.getElementById("proximoTrimestre");
+
+            if (periodoAtual.getFullYear() == parseInt(anoAtual)) {
+                proximo.style.visibility = "hidden";
+            } else {
+                proximo.style.visibility = "visible";
+            }
+
+            if (parseInt(anoAtual) == periodoAtual.getFullYear()) {
+                if (mes >= 3 && mes < 6) {
+                    trimestres.appendChild(tri1)
+                } else if (mes >= 6 && mes < 9) {
+                    trimestres.appendChild(tri1)
+                    trimestres.appendChild(tri2)
+                } else if (mes >= 9 && mes < 12) {
+                    trimestres.appendChild(tri1)
+                    trimestres.appendChild(tri2)
+                    trimestres.appendChild(tri3)
+                } else if (mes == 12) {
+                    trimestres.appendChild(tri1)
+                    trimestres.appendChild(tri2)
+                    trimestres.appendChild(tri3)
+                    trimestres.appendChild(tri4)
+                }
+            } else {
+                trimestres.appendChild(tri1)
+                trimestres.appendChild(tri2)
+                trimestres.appendChild(tri3)
+                trimestres.appendChild(tri4)
+            }
+
+            aplicarSelecaoTrimestre();
+        }
+
+        let arrayTrimestres = []
+
+        function toggleCardTrimestre(trimestreDiv, isChecked) {
+            let div = document.getElementById("TrimestresSalvo");
+            let ano = document.getElementById("anoTrimestre").textContent;
+
+            let trimestreText = trimestreDiv.textContent;
+            let trimestreFormat = trimestreText.substring(0, 6) + "/" + ano;
+            let trimestreFormatSemEspaco = trimestreFormat.replace(/\s/g, '');
+
+            let spanId = trimestreFormatSemEspaco;
+            let existingSpan = document.getElementById(spanId);
+
+            if (isChecked) {
+                if (!existingSpan) {
+
+                    arrayTrimestres.push(trimestreFormatSemEspaco);
+
+                    arrayTrimestres.sort((a, b) => {
+                        let trimestreA = parseInt(a.substring(0, 1));
+                        let anoA = parseInt(a.substring(6, 10)); // Ajustar índice para pegar o ano corretamente
+                        let sortKeyA = anoA * 10 + trimestreA; // Chave de ordenação
+
+                        let trimestreB = parseInt(b.substring(0, 1));
+                        let anoB = parseInt(b.substring(6, 10)); // Ajustar índice para pegar o ano corretamente
+                        let sortKeyB = anoB * 10 + trimestreB; // Chave de ordenação
+
+                        // Ordena de forma decrescente (mais recente primeiro)
+                        return sortKeyB - sortKeyA;
+                    });
+
+                    div.innerHTML = ""
+
+                    arrayTrimestres.forEach(valor => {
+                        let span = document.createElement("span");
+                        let buttonDelete = document.createElement("button")
+                        let divCriada = document.createElement("div")
+                        buttonDelete.innerHTML = "x"
+                        let trimestreFormat = valor.substring(0, 1)
+                        let anoFormat = valor.substring(6, 10)
+                        span.innerHTML = trimestreFormat + "º trimestre de " + anoFormat
+                        span.classList.add("span");
+                        divCriada.id = valor;
+                        divCriada.setAttribute("data-trimestre", valor.split("/")[0].substring(0, 1)); // Define data-trimestre no divCriada
+                        divCriada.appendChild(buttonDelete)
+                        divCriada.appendChild(span);
+
+                        div.appendChild(divCriada)
+
+                        let children = div.children
+
+                        for (let i = 0; i < children.length; i++) {
+                            children[i].setAttribute("data-index", i);
+                        }
+
+                        buttonDelete.addEventListener("click", function () {
+                            let index = divCriada.getAttribute("data-index")
+                            divCriada.remove()
+                            arrayTrimestres.splice(index, 1)
+                            delete selectedTrimestres[trimestreFormat + anoFormat]; // Remove da lista de selecionados
+                            let trimestreDiv = document.querySelector(`div[data-trimestre='${trimestreFormat}${anoFormat}']`);
+
+                            if (trimestreDiv) {
+                                trimestreDiv.classList.remove("selected");
+                                delete selectedTrimestres[trimestreDiv.getAttribute("data-trimestre")];
+                            }
+
+
+                            let children = div.children
+
+                            for (let i = 0; i < children.length; i++) {
+                                children[i].setAttribute("data-index", i);
+                            }
+
+                            setTimeout(() => {
+                                document.getElementById("dropdownMenuTrimestre").style.display = ""
+                            }, 0)
+                        })
+
+                        window.listaDatas = arrayTrimestres
+
+                    });
+                }
+            } else {
+                if (existingSpan) {
+                    div.removeChild(existingSpan);
+                    arrayTrimestres = arrayTrimestres.filter(trimestreFilt => trimestreFilt !== trimestreFormatSemEspaco);
+                    delete selectedTrimestres[trimestreFormat + ano]; // Remove da lista de selecionados
+
+                    window.listaDatas = arrayTrimestres
+
+                }
+            }
+        }
+
+        function aplicarSelecaoTrimestre() {
+            let anoAtual = document.getElementById("anoTrimestre").textContent;
+            let trimestres = document.querySelectorAll(`div[data-trimestre$='${anoAtual}']`);
+
+            trimestres.forEach(trimestre => {
+                let trimestreKey = trimestre.getAttribute("data-trimestre");
+
+                if (selectedTrimestres[trimestreKey]) {
+                    trimestre.classList.add("selected");
+                    toggleCardTrimestre(trimestre, true);
+                }
+
+                trimestre.addEventListener("click", function () {
+                    if (trimestre.classList.contains("selected")) {
+                        trimestre.classList.remove("selected");
+                        delete selectedTrimestres[trimestreKey];
+                        toggleCardTrimestre(trimestre, false);
+                    } else {
+                        trimestre.classList.add("selected");
+                        selectedTrimestres[trimestreKey] = true;
+                        toggleCardTrimestre(trimestre, true);
+                    }
+                });
+            });
+        }
+
+
+        function calendarTrimestre() {
+            let div = document.getElementById("calendarInputTrimestre");
+            let divCalendar = document.getElementById("dropdownMenuTrimestre");
+            criarTrimestre()
+
+            div.addEventListener("click", function (event) {
+                divCalendar.style.display = "";
+                event.stopPropagation();
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!div.contains(event.target)) {
+                    divCalendar.style.display = "none";
+                }
+            });
+        }
+
+        function eventosCalendarioTrimestre() {
+            let proximo = document.getElementById("proximoTrimestre");
+            let anterior = document.getElementById("anteriorTrimestre");
+            let spanAno = document.getElementById("anoTrimestre");
+
+            proximo.addEventListener("click", function () {
+                spanAno.textContent = parseInt(spanAno.textContent) + 1;
+                criarTrimestre();
+            });
+
+            anterior.addEventListener("click", function () {
+                spanAno.textContent = parseInt(spanAno.textContent) - 1;
+                criarTrimestre();
+            });
+        }
+
+        function marcarUltimoTrimestreDisponivel() {
+            let anoAtual = document.getElementById("anoTrimestre").textContent;
+            let dataAtual = new Date()
+            let mes = dataAtual.getMonth() + 1;
+
+            let tri1 = document.querySelector(`div[data-trimestre='${'1' + anoAtual}']`)
+            let tri2 = document.querySelector(`div[data-trimestre='${'2' + anoAtual}']`)
+            let tri3 = document.querySelector(`div[data-trimestre='${'3' + anoAtual}']`)
+            let tri4 = document.querySelector(`div[data-trimestre='${'4' + anoAtual}']`)
+
+            let trimestreDisponivel;
+            if (parseInt(anoAtual) == dataAtual.getFullYear()) {
+                if (mes >= 3 && mes < 6) {
+                    trimestreDisponivel = tri1;
+                } else if (mes >= 6 && mes < 9) {
+                    trimestreDisponivel = tri2;
+                } else if (mes >= 9 && mes < 12) {
+                    trimestreDisponivel = tri3;
+                } else if (mes == 12) {
+                    trimestreDisponivel = tri4;
+                }
+            }
+            if (trimestreDisponivel) {
+                trimestreDisponivel.classList.add("selected");
+                selectedTrimestres[trimestreDisponivel.getAttribute("data-trimestre")] = true;
+                toggleCardTrimestre(trimestreDisponivel, true);
+            }
+
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let spanAno = document.getElementById("anoTrimestre");
+            let currentYear = new Date().getFullYear();
+            spanAno.textContent = currentYear;
+            calendarTrimestre();
+            eventosCalendarioTrimestre();
+            marcarUltimoTrimestreDisponivel()
+        });
+    </script>
+
+</body>
+
+</html>
