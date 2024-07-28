@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animação Olímpica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #87CEEB, #FFB6C1);
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .torch {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 150px;
+            background: url('https://example.com/torch.png') no-repeat center/contain;
+            animation: liftTorch 2s forwards;
+            display: none;
+        }
+
+        .flame {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, yellow, orange, red);
+            border-radius: 50%;
+            animation: flicker 0.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% {
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes liftTorch {
+            0% {
+                bottom: 0;
+                transform: translateX(-50%) rotate(0deg);
+            }
+
+            100% {
+                bottom: 100px;
+                transform: translateX(-50%) rotate(-45deg);
+            }
+        }
+
+        .banner {
+            border: solid;
+            box-sizing: border-box;
+            border-width: 50px;
+            border-bottom-color: transparent;
+            position: fixed;
+            top: -101%;
+
+            height: 102vh;
+            color: rgba(0, 2, 101, 0.8);
+            animation: dropBanner 2s forwards, sway 1s infinite alternate ease-in-out;
+            display: none;
+        }
+
+        .banner:nth-child(odd) {
+            left: calc(25% - 10px);
+        }
+
+        .banner:nth-child(even) {
+            left: calc(75% - 10px);
+        }
+
+        .central-image {
+            position: fixed;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: url('olimpiadas.png') no-repeat center/contain;
+            animation: dropImage 2s forwards;
+            display: none;
+        }
+
+        @keyframes dropBanner {
+            0% {
+                top: -100%;
+            }
+
+            100% {
+                top: -5%;
+            }
+        }
+
+        @keyframes dropImage {
+            0% {
+                top: -100%;
+            }
+
+            100% {
+                top: 50%;
+            }
+        }
+
+        @keyframes sway {
+            0% {
+                transform: translateX(-50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translateX(-48%) rotate(2deg);
+            }
+        }
+
+        @keyframes liftBanner {
+            0% {
+                top: -5%;
+            }
+
+            100% {
+                top: -100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <button id="startButton">Mostrar Tocha e Faixas</button>
+        <div class="torch" id="torch">
+            <div class="flame"></div>
+        </div>
+        <div class="banner" id="banner1"></div>
+        <div class="banner" id="banner2"></div>
+        <div class="central-image" id="centralImage"></div>
+        <div class="banner" id="banner3"></div>
+        <div class="banner" id="banner4"></div>
+    </div>
+
+    <script>
+        document.getElementById('startButton').addEventListener('click', function () {
+            const banners = document.querySelectorAll('.banner');
+            banners.forEach(banner => {
+                banner.style.display = 'block';
+                banner.style.animation = 'dropBanner 2s forwards, sway 1s infinite alternate ease-in-out';
+                banner.addEventListener('animationend', function () {
+                    setTimeout(() => {
+                        banner.style.animation = 'liftBanner 2s forwards, sway 1s infinite alternate ease-in-out';
+                        banner.addEventListener('animationend', function () {
+                            banner.style.display = 'none';
+                        }, { once: true });
+                    }, 2000); // Delay before lifting the banners
+                }, { once: true });
+            });
+
+            const centralImage = document.getElementById('centralImage');
+            centralImage.style.display = 'block';
+            centralImage.style.animation = 'dropImage 2s forwards';
+            centralImage.addEventListener('animationend', function () {
+                setTimeout(() => {
+                    centralImage.style.display = 'none';
+                }, 2000); // Delay before hiding the image
+            }, { once: true });
+        });
+    </script>
+</body>
+
+</html>
